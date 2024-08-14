@@ -1,0 +1,15 @@
+{
+  "name": "webcrawler",
+  "version": "1.0.0",
+  "description": "Web Crawler gives us a report of internal linking structure. Basically which pages are linked to which other pages. This can be useful for search engine optimisation experts.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
