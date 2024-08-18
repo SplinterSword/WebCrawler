@@ -13,7 +13,6 @@ app.use(
 )
 
 const {crawlPage} = require("./crawl.js")
-const {printReport} = require("./report.js")
 
 async function create(url) {
     url = "https://"+url

@@ -1,10 +1,10 @@
 'use client'
 import React from 'react'
-import Image from 'next/image'
-import { useState,useRef } from 'react'
+import {useState} from 'react'
 
 const Main = () => {
     const [url, setURL] = useState({link: ""});
+    const [CrawlData, setCrawlData] = useState([])
 
     const handleChange = async (e) => {
         e.preventDefault()
@@ -22,9 +22,9 @@ const Main = () => {
             body: await JSON.stringify(url)
         })
         
-        const data = await resp.text()
+        const data = await resp.json()
 
-        console.log(data)
+        setCrawlData(data)
     }
 
   return (
@@ -48,8 +48,22 @@ const Main = () => {
             <div className='pb-2 font-bold text-xl flex justify-center items-center gap-2'>
                 <h2 className='text-3xl'>Get Your Crawl Here</h2>
             </div>
-            <div className='min-h-[30vh] font-bold flex justify-center items-center gap-2'>
-                <h1 className='text-xl'>No Url Uploaded</h1>
+            <div className='min-h-[40vh] font-bold flex justify-center gap-2'>
+                {CrawlData.length == 0  && <h1 className='text-xl p-7'>No Url Uploaded</h1>}
+                {CrawlData.length != 0 && <div className='font-bold flex flex-col gap-2 p-5'>
+                    {Object.keys(CrawlData).map((keyname, keyindex) => {
+                        return(<div key={keyname} className='flex justify-between mb-8'>
+                            <p className='w-[50%]'>{keyname}:-</p>
+                            <div className='w-[50%] flex flex-col gap-1'>
+                                {CrawlData[keyname].map((items) =>{
+                                    return(
+                                        <p>{items}</p>
+                                    )
+                                })}
+                            </div>
+                        </div>)
+                    })}
+                </div>}
             </div>
         </div>
     </div>
