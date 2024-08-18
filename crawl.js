@@ -10,12 +10,9 @@ async function crawlPage(baseURL, currentURL, pages){
   
   const normalizedURL = normalizeURL(currentURL)
 
-  if (pages[normalizedURL] > 0){
-    pages[normalizedURL]++
+  if (normalizedURL in pages){
     return pages
   }
-
-  pages[normalizedURL] = 1
 
   console.log(`crawling ${currentURL}`)
   let htmlBody = ''
@@ -36,6 +33,7 @@ async function crawlPage(baseURL, currentURL, pages){
   }
 
   const nextURLs = getURLsFromHTML(htmlBody, baseURL)
+  pages[normalizedURL] = nextURLs
   for (const nextURL of nextURLs){
     pages = await crawlPage(baseURL, nextURL, pages)
   }

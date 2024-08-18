@@ -1,22 +1,46 @@
+const express = require('express')
+const app = express()
+const port = 8000
+const cors = require('cors')
+
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        methods: ["GET","POST","PUT","DELETE"]
+    }),
+    express.static('public'),
+    express.json({limit: '1mb'}),
+)
+
 const {crawlPage} = require("./crawl.js")
 const {printReport} = require("./report.js")
 
-async function main() {
-    if (process.argv.length < 3) {
-        console.log("no website provided")
-        process.exit(1)
+async function create(url) {
+    url = "https://"+url
+    return url
+}
+
+async function main(url) {
+
+    let baseURL
+    if (url.substring(0,4) != "http"){
+        baseURL = await create(url)
+    } else {
+        baseURL = url
     }
-    if (process.argv.length > 3) {
-        console.log("too many command line args")
-        process.exit(1)
-    }
 
-    const baseURL = process.argv[2]
+    const pages = await crawlPage(baseURL,baseURL,{})
 
-    pages = await crawlPage(baseURL,baseURL,{})
-
-    printReport(pages)
+    return pages
 
 }
 
-main()
+app.post('/', async (req, res) => {
+    const url = req.body.link
+    const pages = await main(url)
+    res.send(pages)
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
