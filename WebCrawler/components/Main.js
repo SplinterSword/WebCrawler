@@ -13,7 +13,7 @@ const Main = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const resp = await fetch('http://localhost:8000/', {
+        const resp = await fetch('https://backend-174336477571.us-central1.run.app/', {
             method: 'POST',
             mode: 'cors',
             headers: {
