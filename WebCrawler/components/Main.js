@@ -5,6 +5,7 @@ import {useState} from 'react'
 const Main = () => {
     const [url, setURL] = useState({link: ""});
     const [CrawlData, setCrawlData] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const handleChange = async (e) => {
         e.preventDefault()
@@ -13,7 +14,8 @@ const Main = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const resp = await fetch('https://backend-174336477571.us-central1.run.app/', {
+        setLoading(true)
+        const resp = await fetch('https://webcrawler-backend-544519275637.asia-northeast1.run.app/', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -25,6 +27,7 @@ const Main = () => {
         const data = await resp.json()
 
         setCrawlData(data)
+        setLoading(false)
     }
 
   return (
@@ -49,8 +52,9 @@ const Main = () => {
                 <h2 className='text-3xl'>Get Your Crawl Here</h2>
             </div>
             <div className='min-h-[40vh] font-bold flex justify-center gap-2'>
-                {CrawlData.length == 0  && <h1 className='text-xl p-7'>No Url Uploaded</h1>}
-                {CrawlData.length != 0 && <div className='font-bold flex flex-col gap-2 p-5'>
+                {CrawlData.length == 0  && !loading && <h1 className='text-xl p-7'>No Url Uploaded</h1>}
+                {loading && <h1 className='text-xl p-7'>Loading...</h1>}
+                {!loading && CrawlData.length != 0 && <div className='font-bold flex flex-col gap-2 p-5'>
                     {Object.keys(CrawlData).map((keyname, keyindex) => {
                         return(<div key={keyname} className='flex justify-between mb-8'>
                             <p className='w-[50%]'>{keyname}:-</p>
@@ -67,8 +71,6 @@ const Main = () => {
             </div>
         </div>
     </div>
-
-
   )
 }
 
